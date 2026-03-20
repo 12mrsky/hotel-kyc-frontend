@@ -3,9 +3,8 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   // Update this to your API URL
-static const String baseUrl = "http://localhost:5251/api/Auth";
-  // static const String baseUrl = "https://hotel-kyc-api.onrender.com";
-
+//static const String baseUrl = "http://localhost:5251/api/Auth";
+const BASE_URL = "https://hotel-kyc-backend.onrender.com/api";
   Future<http.Response> register(
     String name,
     String email,
