@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  // ✅ For browser use localhost
-// ✅ NEW
-static const String baseUrl = "https://hotel-kyc-backend.onrender.com/api/Auth";
+  static const String baseUrl =
+      "https://hotel-kyc-backend.onrender.com/api/Auth";
+
   // 🔹 REGISTER
   Future<http.Response> register(
-      String name, String email, String password, String phone) async {
+      String name, String email, String password, String phone,
+      {String role = "Guest"}) async {
     final url = Uri.parse("$baseUrl/register");
 
     return await http.post(
@@ -21,11 +22,12 @@ static const String baseUrl = "https://hotel-kyc-backend.onrender.com/api/Auth";
         "email": email,
         "password": password,
         "phoneNumber": phone,
+        "role": role, // 🔥 ADD
       }),
     );
   }
 
-  // 🔹 LOGIN (FIXED)
+  // 🔹 LOGIN
   Future<http.Response> login(String email, String password) async {
     final url = Uri.parse("$baseUrl/login");
 
@@ -36,7 +38,7 @@ static const String baseUrl = "https://hotel-kyc-backend.onrender.com/api/Auth";
         "Accept": "application/json",
       },
       body: jsonEncode({
-        "email": email,   //  FIXED (NOT fullName)
+        "email": email,
         "password": password,
       }),
     );
