@@ -114,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownButtonFormField<String>(
                 value: selectedRole,
                 decoration: const InputDecoration(labelText: "Role"),
-                items: ["Guest", "Admin"].map((role) {
+                items: ["Admin" , "User"].map((role) {
                   return DropdownMenuItem(
                     value: role,
                     child: Text(role),
