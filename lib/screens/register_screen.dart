@@ -17,6 +17,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _authService = AuthService();
   bool _isLoading = false;
 
+  // 🔥 ADD THIS (Role variable)
+  String selectedRole = "Guest";
+
   void _handleRegister() async {
     print("Button clicked");
 
@@ -28,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text.trim(),
         _passController.text.trim(),
         _phoneController.text.trim(),
+        role: selectedRole, // 🔥 ADD THIS
       );
 
       print("Status: ${response.statusCode}");
@@ -102,6 +106,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _passController,
                 decoration: const InputDecoration(labelText: "Password"),
                 obscureText: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              // 🔥 ADD THIS (Role Dropdown)
+              DropdownButtonFormField<String>(
+                value: selectedRole,
+                decoration: const InputDecoration(labelText: "Role"),
+                items: ["Guest", "Admin"].map((role) {
+                  return DropdownMenuItem(
+                    value: role,
+                    child: Text(role),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedRole = value!;
+                  });
+                },
               ),
 
               const SizedBox(height: 50),
