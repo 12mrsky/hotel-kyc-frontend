@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   // ✅ For browser use localhost
-  static const String baseUrl = "http://localhost:5251/api/Auth";
-
+// ✅ NEW
+static const String baseUrl = "https://hotel-kyc-backend.onrender.com/api/Auth";
   // 🔹 REGISTER
   Future<http.Response> register(
       String name, String email, String password, String phone) async {
@@ -36,7 +36,7 @@ class AuthService {
         "Accept": "application/json",
       },
       body: jsonEncode({
-        "email": email,   // ✅ FIXED (NOT fullName)
+        "email": email,   //  FIXED (NOT fullName)
         "password": password,
       }),
     );

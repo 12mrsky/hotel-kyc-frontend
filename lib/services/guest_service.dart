@@ -5,7 +5,8 @@ import '../models/guest_model.dart';
 
 class GuestService {
   // Use localhost for Chrome. If testing on Android Emulator later, change to 10.0.2.2
-static const String baseUrl = "http://localhost:5251/api/Guest";
+// static const String baseUrl = "http://localhost:5251/api/Guest";
+static const String baseUrl = "https://hotel-kyc-backend.onrender.com/api/Guest";
   // POST: Register Guest
   Future<http.Response> registerGuest(Map<String, dynamic> data) async {
     try {
