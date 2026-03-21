@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/guest_service.dart';
 import '../models/guest_model.dart';
+import 'guest_detail_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
