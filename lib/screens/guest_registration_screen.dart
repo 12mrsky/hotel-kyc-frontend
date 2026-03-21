@@ -30,48 +30,74 @@ class _GuestRegistrationScreenState extends State<GuestRegistrationScreen> {
   final _guestService = GuestService(); 
   bool _isSaving = false;
 
-  void _handleFinalSubmit() async {
-    setState(() => _isSaving = true);
+ void _handleFinalSubmit() async {
+  // ✅ BASIC VALIDATION (NEW)
+  if (_guestNameController.text.isEmpty ||
+      _mobileController.text.isEmpty ||
+      _aadhaarController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please fill required fields")),
+    );
+    return;
+  }
 
-    final guestData = {
-      "roomNumber": _roomController.text,
-      "guestName": _guestNameController.text,
-      "checkInTime": _checkInController.text,
-      "checkOutTime": _checkOutController.text,
-      "adults": int.tryParse(_adultsController.text) ?? 1,
-      "kids": int.tryParse(_kidsController.text) ?? 0,
-      "aadhaarNumber": _aadhaarController.text,
-      "age": int.tryParse(_ageController.text) ?? 0,
-      "mobileNumber": _mobileController.text,
-      "address": _addressController.text,
-      "comingFrom": _comingFromController.text,
-      "goingTo": _goingToController.text,
-    };
+  if (_aadhaarController.text.length != 12) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Invalid Aadhaar Number")),
+    );
+    return;
+  }
 
-    try {
-      final response = await _guestService.registerGuest(guestData);
+  setState(() => _isSaving = true);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Success! Guest Registered."), backgroundColor: Colors.green),
-          );
-          Navigator.pop(context); 
-        }
-      } else {
-        print("Server Response Body: ${response.body}");
-        throw Exception("Server Error: ${response.statusCode}");
-      }
-    } catch (e) {
+  final guestData = {
+    "roomNumber": _roomController.text,
+    "guestName": _guestNameController.text,
+
+    // 🔥 FIXED DATE FORMAT (IMPORTANT CHANGE)
+    "checkInTime": DateTime.now().toIso8601String(),
+    "checkOutTime": DateTime.now()
+        .add(const Duration(days: 1))
+        .toIso8601String(),
+
+    "adults": int.tryParse(_adultsController.text) ?? 1,
+    "kids": int.tryParse(_kidsController.text) ?? 0,
+    "aadhaarNumber": _aadhaarController.text,
+    "age": int.tryParse(_ageController.text) ?? 0,
+    "mobileNumber": _mobileController.text,
+    "address": _addressController.text,
+    "comingFrom": _comingFromController.text,
+    "goingTo": _goingToController.text,
+  };
+
+  try {
+    final response = await _guestService.registerGuest(guestData);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+          const SnackBar(
+              content: Text("Success! Guest Registered."),
+              backgroundColor: Colors.green),
         );
+        Navigator.pop(context);
       }
-    } finally {
-      if (mounted) setState(() => _isSaving = false);
+    } else {
+      print("Server Response Body: ${response.body}");
+      throw Exception("Server Error: ${response.statusCode}");
     }
+  } catch (e) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("Error: $e"),
+            backgroundColor: Colors.red),
+      );
+    }
+  } finally {
+    if (mounted) setState(() => _isSaving = false);
   }
+}
 
   // --- UI WIDGETS ---
 
